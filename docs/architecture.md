@@ -11,16 +11,17 @@ Trying to derive one from the other loses what makes each good — a video compi
 
 ## The shared content model
 
-Defined in `packages/schema`. The rough shape (see that package's source once implemented for the authoritative types):
+Defined in `packages/schema` (implemented — see that package's source for the authoritative zod schemas and inferred types):
 
 ```
-Deck { id, meta, beats: Beat[] }
-Beat { id, heading, blocks: Block[], notes, revealSteps, visualHint, durationHint }
-Block = text | bulletList | code | image | quote | chart
+Deck { id, meta: DeckMeta, beats: Beat[] }
+Beat { id, heading?, blocks: Block[], notes?, visualHint?, durationHint? }
+Block = { id, step? } & (text | bulletList | code | image | quote | chart)
 ```
 
-- `id` on every `Beat` is stable and patch-addressable — mutations are expressed as forward/inverse JSON Patches keyed by that id, the same pattern HyperFrames itself uses internally (`hf-id` + `PatchEvent`). This gives the conversational, checkpoint-free editing loop cheap undo/redo without inventing new machinery.
-- `revealSteps` and `durationHint`/`visualHint` are the two fields that mean different things to each compiler: soft/best-effort for Slidev, load-bearing for HyperFrames.
+- `id` on every `Deck`/`Beat`/`Block` is stable and patch-addressable — mutations will be expressed as forward/inverse JSON Patches keyed by that id, the same pattern HyperFrames itself uses internally (`hf-id` + `PatchEvent`). This gives the conversational, checkpoint-free editing loop cheap undo/redo without inventing new machinery (patch engine itself is a separate, not-yet-implemented v0.2 issue).
+- Progressive reveal lives on each **Block** as an optional `step` number, not as a separate Beat-level list — that way a block's reveal timing travels with the block itself. The Slidev compiler will group blocks by `step` into `v-click` ranges; the HyperFrames compiler will offset each block's `data-start` within the Beat's time range by `step`. (Earlier drafts of this doc described a Beat-level `revealSteps` field; per-block `step` turned out simpler and was adopted during implementation.)
+- `durationHint`/`visualHint` are the two `Beat` fields that mean different things to each compiler: soft/best-effort for Slidev (click-driven, no hard timing), load-bearing for HyperFrames (`data-duration` needs a real number, catalog block selection reads `visualHint`).
 
 ## Compilers are adapters, not renderers
 

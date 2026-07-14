@@ -1,5 +1,6 @@
-import type { Deck } from '@slideforge/schema';
+import type { Beat, Deck } from '@slideforge/schema';
 import { stringify as stringifyYaml } from 'yaml';
+import { renderBlockToMarkdown } from './render-block.js';
 import type { SlidevMarkdown, SourceSlideInfo } from './slidev-parser.js';
 
 /**
@@ -40,12 +41,33 @@ function toSourceSlideInfo(params: {
 }
 
 /**
+ * Renders a Beat's markdown body: an H1 from `heading` (if any), each
+ * Block rendered in order (see render-block.ts), and a trailing HTML
+ * comment for `notes` -- the exact syntax Slidev's own parser reads back
+ * as presenter notes. Ignores `step` (progressive reveal): wrapping
+ * blocks in v-click/v-motion is issue #16's job, layered on top of this.
+ */
+function renderBeatContent(beat: Beat): string {
+  const parts: string[] = [];
+  if (beat.heading) {
+    parts.push(`# ${beat.heading}`);
+  }
+  for (const block of beat.blocks) {
+    parts.push(renderBlockToMarkdown(block));
+  }
+  if (beat.notes) {
+    parts.push(`<!--\n${beat.notes}\n-->`);
+  }
+  return parts.join('\n\n');
+}
+
+/**
  * Compiles a Deck into a Slidev SlidevMarkdown: slide 0 carries the
- * deck-wide headmatter (from Deck.meta), and one slide per Beat follows.
- * Per-slide content rendering (Block -> markdown body) and layout/
- * transition/click-reveal frontmatter land in later issues (#15-#17) --
+ * deck-wide headmatter (from Deck.meta), and one slide per Beat follows,
+ * with its Blocks rendered into the slide's markdown body. Layout/
+ * transition/click-reveal frontmatter land in later issues (#16-#17) --
  * for now each Beat slide only gets a `title` frontmatter field from
- * Beat.heading, with empty content.
+ * Beat.heading.
  */
 export function compileDeckToSlidevMarkdown(deck: Deck): SlidevMarkdown {
   const headmatter: Record<string, unknown> = { title: deck.meta.title };
@@ -63,7 +85,11 @@ export function compileDeckToSlidevMarkdown(deck: Deck): SlidevMarkdown {
     if (beat.heading) {
       frontmatter.title = beat.heading;
     }
-    return toSourceSlideInfo({ index: i + 1, frontmatter, content: '' });
+    return toSourceSlideInfo({
+      index: i + 1,
+      frontmatter,
+      content: renderBeatContent(beat),
+    });
   });
 
   return {

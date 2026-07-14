@@ -1,5 +1,22 @@
-// Placeholder entry point for @slideforge/mcp-server.
-// Real content — tool registration for getDeck/createBeat/updateBeat/reorderBeats/
-// deleteBeat/setNarration/validateDeck (v0.2) and compileSlides/compileVideo/renderVideo
-// (v0.3-v0.4) — lands in tracked issues.
-export const MCP_SERVER_PACKAGE_PLACEHOLDER = true;
+import { pathToFileURL } from 'node:url';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { createServer } from './server.js';
+
+export { createServer } from './server.js';
+
+/** Connects a fresh server to stdio -- how `slideforge mcp` will run it. */
+export async function startStdioServer(): Promise<void> {
+  const server = createServer();
+  const transport = new StdioServerTransport();
+  await server.connect(transport);
+}
+
+const isMainModule =
+  process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isMainModule) {
+  startStdioServer().catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
+}

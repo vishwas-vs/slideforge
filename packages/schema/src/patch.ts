@@ -20,6 +20,9 @@ export interface PatchEvent {
   inverse: PatchOp[];
 }
 
+/** A Deck-mutation recipe, as passed to updateDeck. Exported so consumers (e.g. the MCP server's DeckStore) don't need their own dependency on Immer just to name this type. */
+export type DeckRecipe = (draft: Draft<Deck>) => void;
+
 /**
  * Applies `recipe` to `deck` via an Immer draft, returning both the next
  * Deck and the PatchEvent describing the change. This is the primitive
@@ -27,10 +30,7 @@ export interface PatchEvent {
  * naturally (push a Beat, edit a heading, reorder beats.length) and get
  * a forward/inverse patch pair for undo/redo for free.
  */
-export function updateDeck(
-  deck: Deck,
-  recipe: (draft: Draft<Deck>) => void,
-): { deck: Deck; event: PatchEvent } {
+export function updateDeck(deck: Deck, recipe: DeckRecipe): { deck: Deck; event: PatchEvent } {
   let event: PatchEvent = { forward: [], inverse: [] };
   const next = produce(deck, recipe, (patches, inversePatches) => {
     event = { forward: patches, inverse: inversePatches };

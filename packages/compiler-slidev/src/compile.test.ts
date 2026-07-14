@@ -107,3 +107,22 @@ test('a beat with stepped blocks renders v-click wrappers that survive the real 
   assert.match(reparsedBeatSlide?.content ?? '', /<v-click>/);
   assert.match(reparsedBeatSlide?.content ?? '', /revealed later/);
 });
+
+test('a beat with a matching visualHint gets a layout frontmatter field, verified by the real parser', async () => {
+  const deck: Deck = {
+    id: 'deck-4',
+    meta: { title: 'Layout Deck' },
+    beats: [
+      { id: 'beat-1', heading: 'Section break', blocks: [], visualHint: 'section' },
+      { id: 'beat-2', heading: 'Not a layout', blocks: [], visualHint: 'code-3d-extrude' },
+    ],
+  };
+
+  const markdown = compileDeckToSlidevMarkdown(deck);
+  assert.equal(markdown.slides[1]?.frontmatter.layout, 'section');
+  assert.equal('layout' in (markdown.slides[2]?.frontmatter ?? {}), false);
+
+  const reparsed = await parse(stringify(markdown), 'slides.md');
+  assert.equal(reparsed.slides[1]?.frontmatter.layout, 'section');
+  assert.equal('layout' in (reparsed.slides[2]?.frontmatter ?? {}), false);
+});

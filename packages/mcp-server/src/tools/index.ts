@@ -8,6 +8,7 @@ import { registerPingTool } from './ping.js';
 import { registerReorderBeatsTool } from './reorder-beats.js';
 import { registerSetNarrationTool } from './set-narration.js';
 import { registerUpdateBeatTool } from './update-beat.js';
+import { registerValidateDeckTool } from './validate-deck.js';
 
 /**
  * Central registration point for every slideforge MCP tool. Compile/render
@@ -23,4 +24,5 @@ export function registerTools(server: McpServer, store: DeckStore): void {
   registerReorderBeatsTool(server, store);
   registerDeleteBeatTool(server, store);
   registerSetNarrationTool(server, store);
+  registerValidateDeckTool(server, store);
 }

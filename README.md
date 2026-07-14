@@ -11,7 +11,7 @@ Slides and video are genuinely different outputs with different constraints (cli
 
 ## Status
 
-**Early-stage / pre-v0.2.** The monorepo, tooling, and content-model shape are scaffolded; the compilers themselves are tracked as open issues (see [Milestones](https://github.com/vishwas-vs/slideforge/milestones)). Nothing here renders a real deck or video yet — see `docs/architecture.md` for the intended design and the issue tracker for current progress.
+**Early-stage.** The content model (`packages/schema`) and its MCP tool surface (`packages/mcp-server`) are implemented and tested against a real MCP client — an agent can already create a Deck and build it up beat by beat. The compilers (`compiler-slidev`, `compiler-hyperframes`) and the `slideforge` CLI itself are still open issues (see [Milestones](https://github.com/vishwas-vs/slideforge/milestones)): nothing here renders a real Slidev deck or HyperFrames video yet. See [`docs/architecture.md`](docs/architecture.md) for the intended design and [`docs/content-model.md`](docs/content-model.md) for the content model reference.
 
 ## Why slideforge, not a wrapper around either tool alone
 

@@ -1,0 +1,83 @@
+{
+  "id": "deck-chart-heavy",
+  "meta": {
+    "title": "Quarterly usage report",
+    "description": "A chart-heavy example Deck: reporting illustrative metrics with chart blocks.",
+    "author": "slideforge examples"
+  },
+  "beats": [
+    {
+      "id": "beat-intro",
+      "heading": "This quarter at a glance",
+      "blocks": [
+        { "id": "block-intro-text", "type": "text", "content": "Three charts, one narrative." }
+      ]
+    },
+    {
+      "id": "beat-revenue-chart",
+      "heading": "Revenue by quarter",
+      "blocks": [
+        {
+          "id": "block-revenue-chart",
+          "type": "chart",
+          "chartType": "bar",
+          "title": "Revenue (USD, thousands)",
+          "data": [
+            { "label": "Q1", "value": 120 },
+            { "label": "Q2", "value": 145 },
+            { "label": "Q3", "value": 132 },
+            { "label": "Q4", "value": 168 }
+          ]
+        }
+      ],
+      "durationHint": 6
+    },
+    {
+      "id": "beat-growth-chart",
+      "heading": "User growth",
+      "blocks": [
+        {
+          "id": "block-growth-chart",
+          "type": "chart",
+          "chartType": "line",
+          "title": "Active users (thousands)",
+          "data": [
+            { "label": "Jan", "value": 4.2 },
+            { "label": "Feb", "value": 4.8 },
+            { "label": "Mar", "value": 5.5 },
+            { "label": "Apr", "value": 6.1 }
+          ]
+        }
+      ],
+      "durationHint": 6
+    },
+    {
+      "id": "beat-split-chart",
+      "heading": "Revenue by channel",
+      "blocks": [
+        {
+          "id": "block-split-chart",
+          "type": "chart",
+          "chartType": "pie",
+          "title": "Channel split",
+          "data": [
+            { "label": "Direct", "value": 45 },
+            { "label": "Partner", "value": 30 },
+            { "label": "Self-serve", "value": 25 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "beat-outro",
+      "heading": "Takeaway",
+      "blocks": [
+        {
+          "id": "block-outro-text",
+          "type": "text",
+          "content": "Growth is steady across every channel."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "id": "deck-short-brief",
+  "meta": {
+    "title": "slideforge in 30 seconds",
+    "description": "A short, text-only example Deck: the shape of a minimal pitch.",
+    "author": "slideforge examples"
+  },
+  "beats": [
+    {
+      "id": "beat-hook",
+      "heading": "Slides and video shouldn't be two separate jobs",
+      "blocks": [
+        { "id": "block-hook-text", "type": "text", "content": "One Deck. Two compiled outputs." }
+      ]
+    },
+    {
+      "id": "beat-problem",
+      "heading": "The problem",
+      "blocks": [
+        {
+          "id": "block-problem-list",
+          "type": "bulletList",
+          "items": [
+            "Slidev decks and HyperFrames videos are authored separately today",
+            "Content drifts out of sync between the two",
+            "Nobody wants to write the same pitch twice"
+          ]
+        }
+      ],
+      "notes": "Pause here -- let the problem land before moving on."
+    },
+    {
+      "id": "beat-solution",
+      "heading": "One shared content model",
+      "blocks": [
+        {
+          "id": "block-solution-text",
+          "type": "text",
+          "content": "An agent builds a Deck once. slideforge compiles it to a live Slidev deck and a rendered HyperFrames video."
+        }
+      ],
+      "visualHint": "default",
+      "durationHint": 6
+    },
+    {
+      "id": "beat-cta",
+      "heading": "Try it",
+      "blocks": [
+        { "id": "block-cta-text", "type": "text", "content": "github.com/vishwas-vs/slideforge" }
+      ]
+    }
+  ]
+}

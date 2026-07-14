@@ -1,0 +1,63 @@
+{
+  "id": "deck-code-heavy",
+  "meta": {
+    "title": "What updateDeck actually does",
+    "description": "A code-heavy example Deck: before/after code blocks and a catalog-block visual hint.",
+    "author": "slideforge examples"
+  },
+  "beats": [
+    {
+      "id": "beat-intro",
+      "heading": "Mutating a Deck",
+      "blocks": [
+        {
+          "id": "block-intro-text",
+          "type": "text",
+          "content": "updateDeck() applies a recipe via an Immer draft and hands back a forward/inverse PatchEvent."
+        }
+      ]
+    },
+    {
+      "id": "beat-before",
+      "heading": "Before: no patch tracking",
+      "blocks": [
+        {
+          "id": "block-before-code",
+          "type": "code",
+          "language": "ts",
+          "filename": "naive.ts",
+          "content": "deck.beats.push(newBeat); // mutated in place, no undo"
+        }
+      ],
+      "visualHint": "code-3d-extrude",
+      "durationHint": 8
+    },
+    {
+      "id": "beat-after",
+      "heading": "After: updateDeck",
+      "blocks": [
+        {
+          "id": "block-after-code",
+          "type": "code",
+          "language": "ts",
+          "filename": "with-patches.ts",
+          "content": "const { deck: next, event } = updateDeck(deck, (draft) => {\n  draft.beats.push(newBeat);\n});"
+        }
+      ],
+      "visualHint": "code-3d-extrude",
+      "durationHint": 8
+    },
+    {
+      "id": "beat-outro",
+      "heading": "Undo is free",
+      "blocks": [
+        {
+          "id": "block-outro-quote",
+          "type": "quote",
+          "content": "undo(next, event) deep-equals the original deck.",
+          "attribution": "packages/schema/src/patch.test.ts"
+        }
+      ]
+    }
+  ]
+}

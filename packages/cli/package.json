@@ -15,7 +15,7 @@
     "build": "tsc -b",
     "lint": "biome lint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test"
+    "test": "node --test \"dist/**/*.test.js\""
   },
   "dependencies": {
     "@slideforge/compiler-hyperframes": "workspace:*",

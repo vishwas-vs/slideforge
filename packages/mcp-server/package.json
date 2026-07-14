@@ -12,7 +12,7 @@
     "build": "tsc -b",
     "lint": "biome lint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test"
+    "test": "node --test \"dist/**/*.test.js\""
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.0",

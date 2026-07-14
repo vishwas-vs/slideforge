@@ -1,6 +1,7 @@
 import type { Beat, Deck } from '@slideforge/schema';
 import { stringify as stringifyYaml } from 'yaml';
 import { renderBlocksWithReveal } from './render-block.js';
+import { resolveSlidevLayout } from './resolve-layout.js';
 import type { SlidevMarkdown, SourceSlideInfo } from './slidev-parser.js';
 
 /**
@@ -64,10 +65,11 @@ function renderBeatContent(beat: Beat): string {
 /**
  * Compiles a Deck into a Slidev SlidevMarkdown: slide 0 carries the
  * deck-wide headmatter (from Deck.meta), and one slide per Beat follows,
- * with its Blocks rendered into the slide's markdown body. Layout/
- * transition/click-reveal frontmatter land in later issues (#16-#17) --
- * for now each Beat slide only gets a `title` frontmatter field from
- * Beat.heading.
+ * with its Blocks rendered into the slide's markdown body. Transition
+ * frontmatter is a possible future issue -- for now each Beat slide gets
+ * `title` from Beat.heading and, when visualHint resolves to a real
+ * Slidev layout, `layout` too (omitted otherwise, so Slidev's own
+ * per-slide default applies instead of us overriding it).
  */
 export function compileDeckToSlidevMarkdown(deck: Deck): SlidevMarkdown {
   const headmatter: Record<string, unknown> = { title: deck.meta.title };
@@ -84,6 +86,10 @@ export function compileDeckToSlidevMarkdown(deck: Deck): SlidevMarkdown {
     const frontmatter: Record<string, unknown> = {};
     if (beat.heading) {
       frontmatter.title = beat.heading;
+    }
+    const layout = resolveSlidevLayout(beat.visualHint);
+    if (layout) {
+      frontmatter.layout = layout;
     }
     return toSourceSlideInfo({
       index: i + 1,

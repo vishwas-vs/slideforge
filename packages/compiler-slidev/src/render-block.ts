@@ -1,9 +1,10 @@
 import type { Block } from '@slideforge/schema';
 
 /**
- * Renders one Block to its Slidev markdown body representation. Ignores
- * `step` (progressive reveal) -- wrapping blocks in v-click/v-motion is
- * issue #16's job, layered on top of this plain rendering.
+ * Renders one Block to its Slidev markdown body representation. Doesn't
+ * handle `step` (progressive reveal) itself -- see
+ * renderBlocksWithReveal below, which wraps groups of these in
+ * <v-click>.
  *
  * `chart` has no native Slidev component to render into (core Slidev
  * markdown has nothing built-in, and picking a third-party chart addon
@@ -46,4 +47,42 @@ export function renderBlockToMarkdown(block: Block): string {
       return `${heading}${table}\n\n${note}`;
     }
   }
+}
+
+/**
+ * Renders a Beat's blocks in order, wrapping each contiguous run of
+ * blocks that share the same `step` (> 0) in a single <v-click> so they
+ * reveal together on that click; blocks with no step (or step 0) render
+ * immediately visible, unwrapped. Blank lines around the wrapped content
+ * are required for Slidev's markdown-in-HTML-block parsing to treat it
+ * as markdown rather than raw text.
+ *
+ * `v-motion` mapping (richer per-block animation) isn't implemented --
+ * there's no schema field driving it yet (visualHint is layout, not
+ * motion). A future field would be needed before that's meaningful.
+ */
+export function renderBlocksWithReveal(blocks: Block[]): string {
+  const parts: string[] = [];
+  let i = 0;
+
+  while (i < blocks.length) {
+    const block = blocks[i];
+    const step = block.step ?? 0;
+
+    if (step <= 0) {
+      parts.push(renderBlockToMarkdown(block));
+      i += 1;
+      continue;
+    }
+
+    const group: Block[] = [];
+    while (i < blocks.length && (blocks[i].step ?? 0) === step) {
+      group.push(blocks[i]);
+      i += 1;
+    }
+    const groupContent = group.map(renderBlockToMarkdown).join('\n\n');
+    parts.push(`<v-click>\n\n${groupContent}\n\n</v-click>`);
+  }
+
+  return parts.join('\n\n');
 }

@@ -80,3 +80,30 @@ test('a beat with heading, blocks, and notes renders a full body, recovered corr
   assert.match(reparsedBeatSlide?.content ?? '', /One Deck, two outputs\./);
   assert.equal(reparsedBeatSlide?.note, 'Pause here for effect.');
 });
+
+test('a beat with stepped blocks renders v-click wrappers that survive the real parser', async () => {
+  const deck: Deck = {
+    id: 'deck-3',
+    meta: { title: 'Reveal Deck' },
+    beats: [
+      {
+        id: 'beat-1',
+        heading: 'Progressive reveal',
+        blocks: [
+          { id: 'block-1', type: 'text', content: 'always visible' },
+          { id: 'block-2', type: 'text', content: 'revealed later', step: 1 },
+        ],
+      },
+    ],
+  };
+
+  const markdown = compileDeckToSlidevMarkdown(deck);
+  const beatSlide = markdown.slides[1];
+  assert.match(beatSlide?.content ?? '', /<v-click>[\s\S]*revealed later[\s\S]*<\/v-click>/);
+  assert.doesNotMatch(beatSlide?.content ?? '', /<v-click>[\s\S]*always visible/);
+
+  const reparsed = await parse(stringify(markdown), 'slides.md');
+  const reparsedBeatSlide = reparsed.slides[1];
+  assert.match(reparsedBeatSlide?.content ?? '', /<v-click>/);
+  assert.match(reparsedBeatSlide?.content ?? '', /revealed later/);
+});

@@ -21,6 +21,7 @@
     "@slideforge/compiler-hyperframes": "workspace:*",
     "@slideforge/compiler-slidev": "workspace:*",
     "@slideforge/mcp-server": "workspace:*",
-    "@slideforge/schema": "workspace:*"
+    "@slideforge/schema": "workspace:*",
+    "commander": "^13.0.0"
   }
 }

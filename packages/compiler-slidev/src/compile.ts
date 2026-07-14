@@ -1,6 +1,6 @@
 import type { Beat, Deck } from '@slideforge/schema';
 import { stringify as stringifyYaml } from 'yaml';
-import { renderBlockToMarkdown } from './render-block.js';
+import { renderBlocksWithReveal } from './render-block.js';
 import type { SlidevMarkdown, SourceSlideInfo } from './slidev-parser.js';
 
 /**
@@ -41,19 +41,19 @@ function toSourceSlideInfo(params: {
 }
 
 /**
- * Renders a Beat's markdown body: an H1 from `heading` (if any), each
- * Block rendered in order (see render-block.ts), and a trailing HTML
+ * Renders a Beat's markdown body: an H1 from `heading` (if any), its
+ * blocks (grouped into <v-click> reveals by `step`, see
+ * renderBlocksWithReveal in render-block.ts), and a trailing HTML
  * comment for `notes` -- the exact syntax Slidev's own parser reads back
- * as presenter notes. Ignores `step` (progressive reveal): wrapping
- * blocks in v-click/v-motion is issue #16's job, layered on top of this.
+ * as presenter notes.
  */
 function renderBeatContent(beat: Beat): string {
   const parts: string[] = [];
   if (beat.heading) {
     parts.push(`# ${beat.heading}`);
   }
-  for (const block of beat.blocks) {
-    parts.push(renderBlockToMarkdown(block));
+  if (beat.blocks.length > 0) {
+    parts.push(renderBlocksWithReveal(beat.blocks));
   }
   if (beat.notes) {
     parts.push(`<!--\n${beat.notes}\n-->`);

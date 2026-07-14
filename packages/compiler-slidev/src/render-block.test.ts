@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import type { Block } from '@slideforge/schema';
-import { renderBlockToMarkdown } from './render-block.js';
+import { renderBlockToMarkdown, renderBlocksWithReveal } from './render-block.js';
 
 test('renders a text block as plain content', () => {
   const block: Block = { id: 'b1', type: 'text', content: 'Hello world' };
@@ -80,4 +80,52 @@ test('renders a chart block as a markdown data table', () => {
   assert.match(rendered, /\| Q1 \| 10 \|/);
   assert.match(rendered, /\| Q2 \| 20 \|/);
   assert.match(rendered, /chart type: bar/);
+});
+
+test('renderBlocksWithReveal leaves unstepped blocks unwrapped', () => {
+  const blocks: Block[] = [
+    { id: 'b1', type: 'text', content: 'one' },
+    { id: 'b2', type: 'text', content: 'two' },
+  ];
+  assert.equal(renderBlocksWithReveal(blocks), 'one\n\ntwo');
+});
+
+test('renderBlocksWithReveal treats step 0 the same as no step', () => {
+  const blocks: Block[] = [{ id: 'b1', type: 'text', content: 'one', step: 0 }];
+  assert.equal(renderBlocksWithReveal(blocks), 'one');
+});
+
+test('renderBlocksWithReveal wraps a single stepped block in v-click', () => {
+  const blocks: Block[] = [{ id: 'b1', type: 'text', content: 'one', step: 1 }];
+  assert.equal(renderBlocksWithReveal(blocks), '<v-click>\n\none\n\n</v-click>');
+});
+
+test('renderBlocksWithReveal groups blocks sharing the same step into one v-click', () => {
+  const blocks: Block[] = [
+    { id: 'b1', type: 'text', content: 'one', step: 1 },
+    { id: 'b2', type: 'text', content: 'two', step: 1 },
+  ];
+  assert.equal(renderBlocksWithReveal(blocks), '<v-click>\n\none\n\ntwo\n\n</v-click>');
+});
+
+test('renderBlocksWithReveal gives each distinct step its own v-click', () => {
+  const blocks: Block[] = [
+    { id: 'b1', type: 'text', content: 'one', step: 1 },
+    { id: 'b2', type: 'text', content: 'two', step: 2 },
+  ];
+  assert.equal(
+    renderBlocksWithReveal(blocks),
+    '<v-click>\n\none\n\n</v-click>\n\n<v-click>\n\ntwo\n\n</v-click>',
+  );
+});
+
+test('renderBlocksWithReveal mixes unwrapped and wrapped blocks correctly', () => {
+  const blocks: Block[] = [
+    { id: 'b1', type: 'text', content: 'always visible' },
+    { id: 'b2', type: 'text', content: 'revealed', step: 1 },
+  ];
+  assert.equal(
+    renderBlocksWithReveal(blocks),
+    'always visible\n\n<v-click>\n\nrevealed\n\n</v-click>',
+  );
 });

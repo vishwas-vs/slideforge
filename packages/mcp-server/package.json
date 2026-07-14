@@ -1,0 +1,21 @@
+{
+  "name": "@slideforge/mcp-server",
+  "version": "0.0.0",
+  "private": true,
+  "description": "MCP tool surface for slideforge — content-model CRUD and compile-to-slides/compile-to-video tools for any host agent to drive.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "lint": "biome lint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "@slideforge/schema": "workspace:*"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "slideforge",
+  "version": "0.0.0",
+  "private": true,
+  "description": "CLI for slideforge: init, mcp, slides, video, doctor.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "slideforge": "./dist/index.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "lint": "biome lint .",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@slideforge/compiler-hyperframes": "workspace:*",
+    "@slideforge/compiler-slidev": "workspace:*",
+    "@slideforge/mcp-server": "workspace:*",
+    "@slideforge/schema": "workspace:*"
+  }
+}

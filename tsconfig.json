@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/schema" },
+    { "path": "packages/mcp-server" },
+    { "path": "packages/compiler-slidev" },
+    { "path": "packages/compiler-hyperframes" },
+    { "path": "packages/cli" }
+  ]
+}

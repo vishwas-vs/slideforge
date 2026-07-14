@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question / start a discussion
+    url: https://github.com/vishwas-vs/slideforge/discussions
+    about: For questions, ideas, or open-ended discussion that isn't a concrete bug or feature request.

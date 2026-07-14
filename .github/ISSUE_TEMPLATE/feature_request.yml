@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose new functionality or an improvement.
+labels: ["type:feature", "status:needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before filing, check `docs/architecture.md` and open milestones — it may already be planned.
+  - type: dropdown
+    id: package
+    attributes:
+      label: Which area does this affect?
+      options:
+        - schema
+        - mcp-server
+        - compiler-slidev
+        - compiler-hyperframes
+        - cli
+        - docs / other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: What can't you do today, or what's awkward?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like to happen? Sketch an API/CLI shape if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false

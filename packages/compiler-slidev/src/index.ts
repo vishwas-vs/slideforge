@@ -1,4 +1,7 @@
-// Placeholder entry point for @slideforge/compiler-slidev.
-// Real content — Deck -> Slidev project generation via @slidev/parser — lands
-// in tracked v0.3 issues (see docs/slides-compiler.md once written).
-export const COMPILER_SLIDEV_PACKAGE_PLACEHOLDER = true;
+// Deck -> Slidev project generation lands across the v0.3 issues
+// (headmatter/frontmatter mapping, Block -> markdown body, v-click/
+// v-motion, layout selection, the compileSlides MCP tool). For now this
+// package only proves the @slidev/parser integration works end to end
+// -- see slidev-parser.ts and its test.
+export { parse, stringify } from './slidev-parser.js';
+export type { SlidevMarkdown, SourceSlideInfo } from './slidev-parser.js';

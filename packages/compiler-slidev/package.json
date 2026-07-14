@@ -17,6 +17,7 @@
   "dependencies": {
     "@slidev/parser": "^52.18.0",
     "@slidev/types": "^52.18.0",
-    "@slideforge/schema": "workspace:*"
+    "@slideforge/schema": "workspace:*",
+    "yaml": "^2.9.0"
   }
 }
